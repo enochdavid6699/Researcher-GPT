@@ -19,7 +19,7 @@ from langchain.schema import SystemMessage
 from fastapi import FastAPI
 
 load_dotenv()
-brwoserless_api_key = os.getenv("BROWSERLESS_API_KEY")
+browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
 serper_api_key = os.getenv("SERP_API_KEY")
 
 
@@ -44,11 +44,14 @@ def search(query):
     return response.text
 
 
+# search('who is Iron Man?')
+
+
 # 2. Tool for Scraping
 
 def scrape_website(objective: str, url: str):
     # scrape website, and also will summarize the content based on objective if the content is too large
-    # objective is the original objective & task that user give to the agent, url is the url of the website to be scraped
+    # objective is the original objective & task that user gives to the agent, url is the URL of the website to be scraped
 
     print("Scraping website...")
     # Define the headers for the request
@@ -66,7 +69,7 @@ def scrape_website(objective: str, url: str):
     data_json = json.dumps(data)
 
     # Send the POST request
-    post_url = f"https://chrome.browserless.io/content?token={brwoserless_api_key}"
+    post_url = f"https://chrome.browserless.io/content?token={browserless_api_key}"
     response = requests.post(post_url, headers=headers, data=data_json)
 
     # Check the response status code
@@ -76,12 +79,19 @@ def scrape_website(objective: str, url: str):
         print("CONTENTTTTTT:", text)
 
         if len(text) > 10000:
-            output = summary(objective, text)
+            # Placeholder for the summary function
+            # You should define this function or replace it with your summary logic
+            output = summarize_content(objective, text)
             return output
         else:
             return text
     else:
         print(f"HTTP request failed with status code {response.status_code}")
+
+
+# scrape_website("what is langchain?",
+#                "https://python.langchain.com/en/latest/index.html")
+
 
 
 def summary(objective, content):
@@ -172,6 +182,8 @@ agent = initialize_agent(
     memory=memory,
 )
 
+# agent.run("Hello")
+
 # 4. Use streamlit to create a web app
 def main():
     st.set_page_config(page_title="AI research agent", page_icon=":bird:")
@@ -191,7 +203,7 @@ if __name__ == '__main__':
     main()
 
 
-# 5. Set this as an API endpoint via FastAPI
+# # 5. Set this as an API endpoint via FastAPI
 # app = FastAPI()
 
 
