@@ -21,6 +21,9 @@ from fastapi import FastAPI
 # Define your FastAPI application
 app = FastAPI()
 
+# Rest of your code...
+
+
 load_dotenv()
 browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
 serper_api_key = os.getenv("SERP_API_KEY")
@@ -211,8 +214,6 @@ if __name__ == "__main__":
 
 
 # # 5. Set this as an API endpoint via FastAPI
-app = FastAPI()
-
 
 class Query(BaseModel):
     query: str
