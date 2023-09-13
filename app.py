@@ -18,6 +18,9 @@ import json
 from langchain.schema import SystemMessage
 from fastapi import FastAPI
 
+# Define your FastAPI application
+app = FastAPI()
+
 load_dotenv()
 browserless_api_key = os.getenv("BROWSERLESS_API_KEY")
 serper_api_key = os.getenv("SERP_API_KEY")
@@ -202,19 +205,22 @@ def main():
 if __name__ == '__main__':
     main()
 
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
 # # 5. Set this as an API endpoint via FastAPI
-# app = FastAPI()
+app = FastAPI()
 
 
-# class Query(BaseModel):
-#     query: str
+class Query(BaseModel):
+    query: str
 
-
-# @app.post("/")
-# def researchAgent(query: Query):
-#     query = query.query
-#     content = agent({"input": query})
-#     actual_content = content['output']
-#     return actual_content
+@app.post("/")
+def researchAgent(query: Query):
+    query = query.query
+    content = agent({"input": query})
+    actual_content = content['output']
+    return actual_content
 
